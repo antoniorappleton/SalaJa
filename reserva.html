@@ -1,0 +1,627 @@
+<!doctype html>
+<html lang="pt">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Criar Reserva - SalaJá</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#003B73" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+      .reservation-form {
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        padding: 1.5rem;
+        box-shadow: var(--shadow-sm);
+        border: 1px solid var(--color-border);
+      }
+      .space-selector {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+        margin-bottom: 1.5rem;
+      }
+      .space-option {
+        padding: 1rem;
+        border: 2px solid var(--color-border);
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: var(--transition);
+        text-align: center;
+      }
+      .space-option:hover {
+        border-color: var(--color-navy);
+      }
+      .space-option.selected {
+        border-color: var(--color-navy);
+        background: rgba(0, 59, 115, 0.05);
+      }
+      .space-option-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: var(--radius-md);
+        background: rgba(0, 59, 115, 0.1);
+        color: var(--color-navy);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 0.5rem;
+      }
+      .space-option-title {
+        font-weight: 600;
+        font-size: 0.9rem;
+      }
+      .date-picker {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      .time-slots-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0.5rem;
+        margin-top: 0.5rem;
+      }
+      .time-slot-btn {
+        padding: 0.75rem 0.5rem;
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        background: var(--color-surface);
+        cursor: pointer;
+        font-size: 0.875rem;
+        transition: var(--transition);
+        text-align: center;
+      }
+      .time-slot-btn:hover:not(.unavailable) {
+        border-color: var(--color-navy);
+        color: var(--color-navy);
+      }
+      .time-slot-btn.selected {
+        background: var(--color-navy);
+        border-color: var(--color-navy);
+        color: var(--color-white);
+      }
+      .time-slot-btn.unavailable {
+        opacity: 0.4;
+        cursor: not-allowed;
+        text-decoration: line-through;
+      }
+      .form-section {
+        margin-bottom: 1.5rem;
+      }
+      .form-section-title {
+        font-weight: 600;
+        color: var(--color-navy);
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .recurrence-options {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+      .recurrence-btn {
+        padding: 0.5rem 1rem;
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-full);
+        background: var(--color-surface);
+        cursor: pointer;
+        font-size: 0.875rem;
+        transition: var(--transition);
+      }
+      .recurrence-btn.selected {
+        background: var(--color-navy);
+        border-color: var(--color-navy);
+        color: var(--color-white);
+      }
+      .observation-field {
+        width: 100%;
+        min-height: 100px;
+        padding: 0.75rem;
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        font-family: inherit;
+        font-size: 0.9375rem;
+        resize: vertical;
+      }
+      .observation-field:focus {
+        outline: none;
+        border-color: var(--color-navy);
+      }
+      .summary-card {
+        background: rgba(0, 59, 115, 0.05);
+        border-radius: var(--radius-md);
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+      }
+      .summary-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid var(--color-border);
+      }
+      .summary-row:last-child {
+        border-bottom: none;
+      }
+      .summary-label {
+        color: var(--color-text-muted);
+        font-size: 0.875rem;
+      }
+      .summary-value {
+        font-weight: 600;
+        font-size: 0.875rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app-layout">
+      <!-- Sidebar -->
+      <aside class="sidebar" id="appSidebar">
+        <div class="sidebar-header">
+          <div class="logo-wrapper">
+            <img
+              src="logo.svg"
+              alt="SalaJá"
+              style="width: 32px; height: auto"
+            />
+            <h2>SalaJá</h2>
+          </div>
+          -btn close-sidebar mobile-only" id="<button class="iconcloseSidebar">
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+        <div class="sidebar-content">
+          <div class="nav-section-title">Principal</div>
+          <nav class="sidebar-nav">
+            <a href="dashboard.html" class="nav-link"
+              ><i data-lucide="layout-dashboard"></i> Dashboard</a
+            >
+            <a href="index.html" class="nav-link"
+              ><i data-lucide="compass"></i> Explorar</a
+            >
+            <a href="reserva.html" class="nav-link active"
+              ><i data-lucide="calendar-plus"></i> Criar Reserva</a
+            >
+            <a href="calendario.html" class="nav-link"
+              ><i data-lucide="calendar-days"></i> Calendário</a
+            >
+            <a href="horarios.html" class="nav-link"
+              ><i data-lucide="clock"></i> Horários</a
+            >
+            <a href="minhas-reservas.html" class="nav-link"
+              ><i data-lucide="calendar-check"></i> As Minhas Reservas</a
+            >
+          </nav>
+          <div class="nav-section-title mt-4">Conta</div>
+          <nav class="sidebar-nav">
+            <a href="perfil.html" class="nav-link"
+              ><i data-lucide="user"></i> Perfil</a
+            >
+            <a href="definicoes.html" class="nav-link"
+              ><i data-lucide="settings"></i> Definições</a
+            >
+            <a
+              href="admin.html"
+              class="nav-link"
+              id="nav-admin"
+              style="display: none"
+              ><i data-lucide="shield-check"></i> Administração</a
+            >
+            <a
+              href="login.html"
+              class="nav-link text-danger"
+              style="margin-top: auto"
+              ><i data-lucide="log-out"></i> Terminar Sessão</a
+            >
+          </nav>
+        </div>
+      </aside>
+
+      <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+      <div class="main-wrapper">
+        <header class="top-bar">
+          <div class="top-bar-left">
+            <button class="icon-btn menu-btn mobile-only" id="openSidebar">
+              <i data-lucide="menu"></i>
+            </button>
+            <h1 class="page-title mobile-only">Nova Reserva</h1>
+            <div class="desktop-only text-muted">
+              <h1 class="page-title text-navy">Criar Reserva</h1>
+              <p style="font-size: 0.9rem">
+                Reserve o espaço ideal para a sua atividade.
+              </p>
+            </div>
+          </div>
+          <div class="top-bar-right">
+            <a href="perfil.html" class="profile-avatar">
+              <i data-lucide="user" style="width: 20px; height: 20px"></i>
+            </a>
+          </div>
+        </header>
+
+        <main class="content-area">
+          <form id="reservationForm" class="reservation-form animate-in">
+            <!-- Selection Summary -->
+            <div class="summary-card" id="summaryCard" style="display: none">
+              <div class="summary-row">
+                <span class="summary-label">Espaço</span>
+                <span class="summary-value" id="summarySpace">-</span>
+              </div>
+              <div class="summary-row">
+                <span class="summary-label">Data</span>
+                <span class="summary-value" id="summaryDate">-</span>
+              </div>
+              <div class="summary-row">
+                <span class="summary-label">Hora</span>
+                <span class="summary-value" id="summaryTime">-</span>
+              </div>
+            </div>
+
+            <!-- Step 1: Select Space -->
+            <div class="form-section">
+              <div class="form-section-title">
+                <i data-lucide="building-2"></i>
+                Selecione o Espaço
+              </div>
+              <div class="space-selector" id="spaceSelector">
+                <div class="space-option" data-space="ginasio-velho">
+                  <div class="space-option-icon">
+                    <i data-lucide="dumbbell"></i>
+                  </div>
+                  <div class="space-option-title">Ginásio Velho</div>
+                </div>
+                <div class="space-option" data-space="ginasio-novo">
+                  <div class="space-option-icon">
+                    <i data-lucide="activity"></i>
+                  </div>
+                  <div class="space-option-title">Ginásio Novo</div>
+                </div>
+                <div class="space-option" data-space="sala-riscas">
+                  <div class="space-option-icon">
+                    <i data-lucide="align-justify"></i>
+                  </div>
+                  <div class="space-option-title">Sala das Riscas</div>
+                </div>
+                <div class="space-option" data-space="sala-carlo">
+                  <div class="space-option-icon">
+                    <i data-lucide="book-heart"></i>
+                  </div>
+                  <div class="space-option-title">Sala Carlo Acutis</div>
+                </div>
+                <div class="space-option" data-space="capela">
+                  <div class="space-option-icon">
+                    <i data-lucide="church"></i>
+                  </div>
+                  <div class="space-option-title">Capela</div>
+                </div>
+                <div class="space-option" data-space="polidesportivo">
+                  <div class="space-option-icon">
+                    <i data-lucide="goal"></i>
+                  </div>
+                  <div class="space-option-title">Polidesportivo</div>
+                </div>
+                <div class="space-option" data-space="sala-profissional">
+                  <div class="space-option-icon">
+                    <i data-lucide="graduation-cap"></i>
+                  </div>
+                  <div class="space-option-title">Sala do Profissional</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 2: Select Date -->
+            <div class="form-section">
+              <div class="form-section-title">
+                <i data-lucide="calendar"></i>
+                Selecione a Data
+              </div>
+              <input
+                type="date"
+                id="dateInput"
+                class="form-input"
+                style="width: 100%"
+              />
+            </div>
+
+            <!-- Step 3: Select Time -->
+            <div class="form-section">
+              <div class="form-section-title">
+                <i data-lucide="clock"></i>
+                Selecione o Horário
+              </div>
+              <div class="time-slots-grid" id="timeSlots">
+                <!-- Generated by JS -->
+              </div>
+            </div>
+
+            <!-- Step 4: Recurrence -->
+            <div class="form-section">
+              <div class="form-section-title">
+                <i data-lucide="repeat"></i>
+                Repetiçao (opcional)
+              </div>
+              <div class="recurrence-options" id="recurrenceOptions">
+                <button
+                  type="button"
+                  class="recurrence-btn selected"
+                  data-value="none"
+                >
+                  Uma vez
+                </button>
+                <button type="button" class="recurrence-btn" data-value="daily">
+                  Diário
+                </button>
+                <button
+                  type="button"
+                  class="recurrence-btn"
+                  data-value="weekly"
+                >
+                  Semanal
+                </button>
+                <button
+                  type="button"
+                  class="recurrence-btn"
+                  data-value="monthly"
+                >
+                  Mensal
+                </button>
+              </div>
+            </div>
+
+            <!-- Step 5: Observations -->
+            <div class="form-section">
+              <div class="form-section-title">
+                <i data-lucide="message-square"></i>
+                Observações (opcional)
+              </div>
+              <textarea
+                class="observation-field"
+                id="observations"
+                placeholder="Adicione alguma informação relevante para a sua reserva..."
+              ></textarea>
+            </div>
+
+            <!-- Submit Button -->
+            <button
+              type="submit"
+              class="btn btn-primary"
+              style="width: 100%; padding: 1rem"
+              id="submitBtn"
+              disabled
+            >
+              <i data-lucide="check-circle"></i>
+              Confirmar Reserva
+            </button>
+          </form>
+        </main>
+
+        <nav class="bottom-nav mobile-only">
+          <a href="dashboard.html" class="nav-item">
+            <div class="nav-icon">
+              <i
+                data-lucide="layout-dashboard"
+                style="width: 22px; height: 22px"
+              ></i>
+            </div>
+            <span>Início</span>
+          </a>
+          <a href="calendario.html" class="nav-item">
+            <div class="nav-icon">
+              <i
+                data-lucide="calendar-days"
+                style="width: 22px; height: 22px"
+              ></i>
+            </div>
+            <span>Calendário</span>
+          </a>
+          <a href="index.html" class="nav-item">
+            <div class="nav-icon">
+              <i data-lucide="compass" style="width: 22px; height: 22px"></i>
+            </div>
+            <span>Explorar</span>
+          </a>
+          <a href="minhas-reservas.html" class="nav-item">
+            <div class="nav-icon">
+              <i data-lucide="list" style="width: 22px; height: 22px"></i>
+            </div>
+            <span>Lista</span>
+          </a>
+        </nav>
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+      lucide.createIcons();
+
+      // Initialize time slots
+      const timeSlots = [
+        "08:00",
+        "08:30",
+        "09:00",
+        "09:30",
+        "10:00",
+        "10:30",
+        "11:00",
+        "11:30",
+        "12:00",
+        "12:30",
+        "13:00",
+        "13:30",
+        "14:00",
+        "14:30",
+        "15:00",
+        "15:30",
+        "16:00",
+        "16:30",
+        "17:00",
+        "17:30",
+        "18:00",
+        "18:30",
+        "19:00",
+        "19:30",
+        "20:00",
+        "20:30",
+        "21:00",
+      ];
+
+      const timeSlotsContainer = document.getElementById("timeSlots");
+      timeSlots.forEach((time) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "time-slot-btn";
+        btn.textContent = time;
+        btn.dataset.time = time;
+        // Randomly mark some as unavailable for demo
+        if (Math.random() < 0.2) {
+          btn.classList.add("unavailable");
+        }
+        timeSlotsContainer.appendChild(btn);
+      });
+
+      // Space selection
+      const spaceOptions = document.querySelectorAll(".space-option");
+      let selectedSpace = null;
+      let selectedTime = null;
+
+      spaceOptions.forEach((option) => {
+        option.addEventListener("click", () => {
+          spaceOptions.forEach((o) => o.classList.remove("selected"));
+          option.classList.add("selected");
+          selectedSpace = option.dataset.space;
+          updateSummary();
+        });
+      });
+
+      // Time slot selection
+      timeSlotsContainer.addEventListener("click", (e) => {
+        if (
+          e.target.classList.contains("time-slot-btn") &&
+          !e.target.classList.contains("unavailable")
+        ) {
+          timeSlotsContainer
+            .querySelectorAll(".time-slot-btn")
+            .forEach((b) => b.classList.remove("selected"));
+          e.target.classList.add("selected");
+          selectedTime = e.target.dataset.time;
+          updateSummary();
+        }
+      });
+
+      // Date input
+      const dateInput = document.getElementById("dateInput");
+      dateInput.addEventListener("change", updateSummary);
+
+      // Set min date to today
+      const today = new Date().toISOString().split("T")[0];
+      dateInput.min = today;
+      dateInput.value = today;
+
+      // Recurrence buttons
+      const recurrenceBtns = document.querySelectorAll(".recurrence-btn");
+      recurrenceBtns.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          recurrenceBtns.forEach((b) => b.classList.remove("selected"));
+          btn.classList.add("selected");
+        });
+      });
+
+      // Update summary
+      function updateSummary() {
+        const summaryCard = document.getElementById("summaryCard");
+        const submitBtn = document.getElementById("submitBtn");
+
+        const spaceNames = {
+          "ginasio-velho": "Ginásio Velho",
+          "ginasio-novo": "Ginásio Novo",
+          "sala-riscas": "Sala das Riscas",
+          "sala-carlo": "Sala Carlo Acutis",
+          capela: "Capela",
+          polidesportivo: "Polidesportivo",
+          "sala-profissional": "Sala do Profissional",
+        };
+
+        if (selectedSpace && dateInput.value && selectedTime) {
+          summaryCard.style.display = "block";
+          document.getElementById("summarySpace").textContent =
+            spaceNames[selectedSpace] || selectedSpace;
+          document.getElementById("summaryDate").textContent = new Date(
+            dateInput.value,
+          ).toLocaleDateString("pt-PT");
+          document.getElementById("summaryTime").textContent = selectedTime;
+          submitBtn.disabled = false;
+        } else {
+          summaryCard.style.display = "none";
+          submitBtn.disabled = true;
+        }
+      }
+
+      // Form submission
+      document
+        .getElementById("reservationForm")
+        .addEventListener("submit", (e) => {
+          e.preventDefault();
+
+          const reserva = {
+            id: Date.now(),
+            espaco: document.getElementById("summarySpace").textContent,
+            data: document.getElementById("summaryDate").textContent,
+            hora: selectedTime,
+            status: "pendente",
+            observacoes: document.getElementById("observations").value,
+            usuario: localStorage.getItem("currentUser") || "Utilizador",
+          };
+
+          // Save reservation
+          const reservas = JSON.parse(localStorage.getItem("reservas")) || [];
+          reservas.push(reserva);
+          localStorage.setItem("reservas", JSON.stringify(reservas));
+
+          showToast("Reserva criada com sucesso!", "success");
+
+          // Reset form
+          setTimeout(() => {
+            window.location.href = "minhas-reservas.html";
+          }, 1500);
+        });
+
+      // Check for pre-selected space from index
+      const preSelectedSpace = localStorage.getItem("selectedSpace");
+      if (preSelectedSpace) {
+        const spaceMap = {
+          "Ginásio Velho": "ginasio-velho",
+          "Ginásio Novo": "ginasio-novo",
+          "Sala das Riscas": "sala-riscas",
+          "Sala Carlo Acutis": "sala-carlo",
+          Capela: "capela",
+          Polidesportivo: "polidesportivo",
+          "Sala do Profissional": "sala-profissional",
+        };
+        const spaceKey = spaceMap[preSelectedSpace];
+        if (spaceKey) {
+          const option = document.querySelector(`[data-space="${spaceKey}"]`);
+          if (option) {
+            option.click();
+          }
+        }
+        localStorage.removeItem("selectedSpace");
+      }
+    </script>
+  </body>
+</html>

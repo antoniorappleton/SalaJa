@@ -1,0 +1,325 @@
+﻿<!doctype html>
+<html lang="pt">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Ramalhão Reservas</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#003B73" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link
+      rel="icon"
+      type="image/png"
+      href="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Yellow_Star.svg/32px-Yellow_Star.svg.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      href="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Yellow_Star.svg/180px-Yellow_Star.svg.png"
+    />
+  </head>
+  <body>
+    <div class="app-layout">
+      <!-- Sidebar (Desktop default / Mobile Drawer) -->
+      <aside class="sidebar" id="appSidebar">
+        <div class="sidebar-header">
+          <div class="logo-wrapper">
+            <img
+              src="logo.svg"
+              alt="SalaJá"
+              style="width: 32px; height: auto"
+            />
+            <h2>SalaJá</h2>
+          </div>
+          <button class="icon-btn close-sidebar mobile-only" id="closeSidebar">
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+        <div class="sidebar-content">
+          <div class="nav-section-title">Principal</div>
+          <nav class="sidebar-nav">
+            <a href="dashboard.html" class="nav-link"
+              ><i data-lucide="layout-dashboard"></i> Dashboard</a
+            >
+            <a href="index.html" class="nav-link active"
+              ><i data-lucide="compass"></i> Explorar</a
+            >
+            <a href="reserva.html" class="nav-link"
+              ><i data-lucide="calendar-plus"></i> Criar Reserva</a
+            >
+            <a href="calendario.html" class="nav-link"
+              ><i data-lucide="calendar-days"></i> Calendário</a
+            >
+            <a href="horarios.html" class="nav-link"
+              ><i data-lucide="clock"></i> Horários</a
+            >
+            <a href="minhas-reservas.html" class="nav-link"
+              ><i data-lucide="calendar-check"></i> As Minhas Reservas</a
+            >
+          </nav>
+          <div class="nav-section-title mt-4">Conta</div>
+          <nav class="sidebar-nav">
+            <a href="perfil.html" class="nav-link"
+              ><i data-lucide="user"></i> Perfil</a
+            >
+            <a href="definicoes.html" class="nav-link"
+              ><i data-lucide="settings"></i> Definições</a
+            >
+            <a
+              href="admin.html"
+              class="nav-link"
+              id="nav-admin"
+              style="display: none"
+              ><i data-lucide="shield-check"></i> Administração</a
+            >
+            <a
+              href="login.html"
+              class="nav-link text-danger"
+              style="margin-top: auto"
+              ><i data-lucide="log-out"></i> Terminar Sessão</a
+            >
+          </nav>
+        </div>
+      </aside>
+
+      <!-- Overlay strictly for mobile -->
+      <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+      <!-- Main Content Wrapper -->
+      <div class="main-wrapper">
+        <!-- Top App Bar -->
+        <header class="top-bar">
+          <div class="top-bar-left">
+            <button class="icon-btn menu-btn mobile-only" id="openSidebar">
+              <i data-lucide="menu"></i>
+            </button>
+            <h1 class="page-title mobile-only">Explorar</h1>
+            <div class="desktop-only text-muted">
+              <h1 class="page-title text-navy">Bem-vindo(a) de volta 👋</h1>
+              <p style="font-size: 0.9rem">O que quer reservar hoje?</p>
+            </div>
+          </div>
+          <div class="top-bar-right">
+            <button class="icon-btn desktop-only" style="margin-right: 0.5rem">
+              <i data-lucide="bell"></i>
+            </button>
+            <a href="login.html" class="profile-avatar">
+              <i data-lucide="user" style="width: 20px; height: 20px"></i>
+            </a>
+          </div>
+        </header>
+
+        <!-- Scrollable Content -->
+        <main class="content-area">
+          <!-- Welcome Section for Mobile only -->
+          <div
+            class="welcome-section animate-in mobile-only"
+            style="animation-delay: 0.1s"
+          >
+            <h2 class="welcome-title">O que vamos fazer hoje?</h2>
+            <p class="welcome-subtitle">Explore e reserve os nossos espaços.</p>
+          </div>
+
+          <!-- Filters / Categories -->
+          <div class="category-pills animate-in" style="animation-delay: 0.2s">
+            <button class="pill-btn active">Todos</button>
+            <button class="pill-btn">Desporto</button>
+            <button class="pill-btn">Estudo</button>
+            <button class="pill-btn">Especiais</button>
+          </div>
+
+          <div class="section-title desktop-only mt-3 mb-3">
+            <h3>Espaços Disponíveis</h3>
+          </div>
+
+          <!-- Grid/List of Spaces -->
+          <div class="spaces-grid">
+            <div
+              class="space-card animate-in pulse-click"
+              style="animation-delay: 0.3s"
+            >
+              <div class="space-icon-wrapper">
+                <i data-lucide="dumbbell"></i>
+              </div>
+              <div class="space-info">
+                <h3>Ginásio Velho</h3>
+                <p>Espaço clássico para atividades físicas e treinos.</p>
+              </div>
+              <div class="space-action">
+                <button class="btn btn-primary btn-sm desktop-only">
+                  Reservar
+                </button>
+                <i data-lucide="chevron-right" class="mobile-only"></i>
+              </div>
+            </div>
+
+            <div
+              class="space-card animate-in pulse-click"
+              style="animation-delay: 0.4s"
+            >
+              <div class="space-icon-wrapper">
+                <i data-lucide="activity"></i>
+              </div>
+              <div class="space-info">
+                <h3>Ginásio Novo</h3>
+                <p>Instalações modernas para multi-desportos.</p>
+              </div>
+              <div class="space-action">
+                <button class="btn btn-primary btn-sm desktop-only">
+                  Reservar
+                </button>
+                <i data-lucide="chevron-right" class="mobile-only"></i>
+              </div>
+            </div>
+
+            <div
+              class="space-card animate-in pulse-click"
+              style="animation-delay: 0.5s"
+            >
+              <div class="space-icon-wrapper">
+                <i data-lucide="align-justify"></i>
+              </div>
+              <div class="space-info">
+                <h3>Sala das Riscas</h3>
+                <p>Ideal para reuniões e trabalho de grupo.</p>
+              </div>
+              <div class="space-action">
+                <button class="btn btn-primary btn-sm desktop-only">
+                  Reservar
+                </button>
+                <i data-lucide="chevron-right" class="mobile-only"></i>
+              </div>
+            </div>
+
+            <div
+              class="space-card animate-in pulse-click"
+              style="animation-delay: 0.6s"
+            >
+              <div class="space-icon-wrapper">
+                <i data-lucide="book-heart"></i>
+              </div>
+              <div class="space-info">
+                <h3>Sala Carlo Acutis</h3>
+                <p>Sala multimédia e tecnológica de estudo.</p>
+              </div>
+              <div class="space-action">
+                <button class="btn btn-primary btn-sm desktop-only">
+                  Reservar
+                </button>
+                <i data-lucide="chevron-right" class="mobile-only"></i>
+              </div>
+            </div>
+
+            <div
+              class="space-card animate-in pulse-click"
+              style="animation-delay: 0.7s"
+            >
+              <div class="space-icon-wrapper">
+                <i data-lucide="church"></i>
+              </div>
+              <div class="space-info">
+                <h3>Capela</h3>
+                <p>Espaço silencioso para reflexão e oração.</p>
+              </div>
+              <div class="space-action">
+                <button class="btn btn-primary btn-sm desktop-only">
+                  Reservar
+                </button>
+                <i data-lucide="chevron-right" class="mobile-only"></i>
+              </div>
+            </div>
+
+            <div
+              class="space-card animate-in pulse-click"
+              style="animation-delay: 0.8s"
+            >
+              <div class="space-icon-wrapper">
+                <i data-lucide="goal"></i>
+              </div>
+              <div class="space-info">
+                <h3>Polidesportivo</h3>
+                <p>Campo exterior para futebol, ténis e mais.</p>
+              </div>
+              <div class="space-action">
+                <button class="btn btn-primary btn-sm desktop-only">
+                  Reservar
+                </button>
+                <i data-lucide="chevron-right" class="mobile-only"></i>
+              </div>
+            </div>
+
+            <div
+              class="space-card animate-in pulse-click"
+              style="animation-delay: 0.9s"
+            >
+              <div class="space-icon-wrapper">
+                <i data-lucide="graduation-cap"></i>
+              </div>
+              <div class="space-info">
+                <h3>Sala do Profissional</h3>
+                <p>Espaço reservado para ensino e formações.</p>
+              </div>
+              <div class="space-action">
+                <button class="btn btn-primary btn-sm desktop-only">
+                  Reservar
+                </button>
+                <i data-lucide="chevron-right" class="mobile-only"></i>
+              </div>
+            </div>
+          </div>
+        </main>
+
+        <!-- Bottom Navigation App Bar (Mobile Only) -->
+        <nav class="bottom-nav mobile-only">
+          <a href="dashboard.html" class="nav-item">
+            <div class="nav-icon">
+              <i
+                data-lucide="layout-dashboard"
+                style="width: 22px; height: 22px"
+              ></i>
+            </div>
+            <span>Início</span>
+          </a>
+          <a href="calendario.html" class="nav-item">
+            <div class="nav-icon">
+              <i
+                data-lucide="calendar-days"
+                style="width: 22px; height: 22px"
+              ></i>
+            </div>
+            <span>Calendário</span>
+          </a>
+          <a href="index.html" class="nav-item active">
+            <div class="nav-icon">
+              <i data-lucide="compass" style="width: 22px; height: 22px"></i>
+            </div>
+            <span>Explorar</span>
+          </a>
+          <a href="minhas-reservas.html" class="nav-item">
+            <div class="nav-icon">
+              <i data-lucide="list" style="width: 22px; height: 22px"></i>
+            </div>
+            <span>Lista</span>
+          </a>
+        </nav>
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+      lucide.createIcons();
+    </script>
+  </body>
+</html>

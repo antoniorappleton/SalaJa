@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="pt">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>As Minhas Reservas - SalaJá</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#003B73" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+      .reservas-filters {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        margin-bottom: 1.5rem;
+      }
+      .reserva-card {
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        padding: 1.25rem;
+        box-shadow: var(--shadow-sm);
+        border: 1px solid var(--color-border);
+        margin-bottom: 1rem;
+      }
+      .reserva-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 0.75rem;
+      }
+      .reserva-space {
+        font-weight: 600;
+        font-size: 1.1rem;
+        color: var(--color-navy);
+      }
+      .reserva-datetime {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--color-text-muted);
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+      }
+      .reserva-observations {
+        font-size: 0.875rem;
+        color: var(--color-text-muted);
+        padding: 0.5rem;
+        background: rgba(0, 59, 115, 0.03);
+        border-radius: var(--radius-sm);
+        margin-top: 0.75rem;
+      }
+      .reserva-actions {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 1rem;
+        padding-top: 0.75rem;
+        border-top: 1px solid var(--color-border);
+      }
+      .btn-cancel {
+        background: transparent;
+        color: var(--color-danger);
+        border: 1px solid var(--color-danger);
+        padding: 0.5rem 1rem;
+        border-radius: var(--radius-md);
+        font-size: 0.875rem;
+        cursor: pointer;
+        transition: var(--transition);
+      }
+      .btn-cancel:hover {
+        background: rgba(220, 38, 38, 0.1);
+      }
+      .empty-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 4rem 1rem;
+        text-align: center;
+      }
+      .empty-icon {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: rgba(0, 59, 115, 0.05);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1.5rem;
+        color: var(--color-text-muted);
+      }
+      .empty-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--color-navy);
+        margin-bottom: 0.5rem;
+      }
+      .empty-text {
+        color: var(--color-text-muted);
+        margin-bottom: 1.5rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app-layout">
+      <!-- Sidebar -->
+      <aside class="sidebar" id="appSidebar">
+        <div class="sidebar-header">
+          <div class="logo-wrapper">
+            <img
+              src="logo.svg"
+              alt="SalaJá"
+              style="width: 32px; height: auto"
+            />
+            <h2>SalaJá</h2>
+          </div>
+          <button class="icon-btn close-sidebar mobile-only" id="closeSidebar">
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+        <div class="sidebar-content">
+          <div class="nav-section-title">Principal</div>
+          <nav class="sidebar-nav">
+            <a href="dashboard.html" class="nav-link"
+              ><i data-lucide="layout-dashboard"></i> Dashboard</a
+            >
+            <a href="index.html" class="nav-link"
+              ><i data-lucide="compass"></i> Explorar</a
+            >
+            <a href="reserva.html" class="nav-link"
+              ><i data-lucide="calendar-plus"></i> Criar Reserva</a
+            >
+            <a href="calendario.html" class="nav-link"
+              ><i data-lucide="calendar-days"></i> Calendário</a
+            >
+            <a href="horarios.html" class="nav-link"
+              ><i data-lucide="clock"></i> Horários</a
+            >
+            <a href="minhas-reservas.html" class="nav-link active"
+              ><i data-lucide="calendar-check"></i> As Minhas Reservas</a
+            >
+          </nav>
+          <div class="nav-section-title mt-4">Conta</div>
+          <nav class="sidebar-nav">
+            <a href="perfil.html" class="nav-link"
+              ><i data-lucide="user"></i> Perfil</a
+            >
+            <a href="definicoes.html" class="nav-link"
+              ><i data-lucide="settings"></i> Definições</a
+            >
+            <a
+              href="admin.html"
+              class="nav-link"
+              id="nav-admin"
+              style="display: none"
+              ><i data-lucide="shield-check"></i> Administração</a
+            >
+            <a
+              href="login.html"
+              class="nav-link text-danger"
+              style="margin-top: auto"
+              ><i data-lucide="log-out"></i> Terminar Sessão</a
+            >
+          </nav>
+        </div>
+      </aside>
+
+      <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+      <div class="main-wrapper">
+        <header class="top-bar">
+          <div class="top-bar-left">
+            <button class="icon-btn menu-btn mobile-only" id="openSidebar">
+              <i data-lucide="menu"></i>
+            </button>
+            <h1 class="page-title mobile-only">As Minhas Reservas</h1>
+            <div class="desktop-only text-muted">
+              <h1 class="page-title text-navy">As Minhas Reservas</h1>
+              <p style="font-size: 0.9rem">Gerir as suas reservas.</p>
+            </div>
+          </div>
+          <div class="top-bar-right">
+            <a href="perfil.html" class="profile-avatar">
+              <i data-lucide="user" style="width: 20px; height: 20px"></i>
+            </a>
+          </div>
+        </header>
+
+        <main class="content-area">
+          <div class="reservas-filters animate-in">
+            <button class="pill-btn active" data-filter="all">Todas</button>
+            <button class="pill-btn" data-filter="pendente">Pendentes</button>
+            <button class="pill-btn" data-filter="confirmada">
+              Confirmadas
+            </button>
+            <button class="pill-btn" data-filter="cancelada">Canceladas</button>
+          </div>
+
+          <div
+            id="reservasList"
+            class="animate-in"
+            style="animation-delay: 0.1s"
+          >
+            <!-- Reservas rendered via JS -->
+          </div>
+        </main>
+
+        <nav class="bottom-nav mobile-only">
+          <a href="dashboard.html" class="nav-item">
+            <div class="nav-icon">
+              <i
+                data-lucide="layout-dashboard"
+                style="width: 22px; height: 22px"
+              ></i>
+            </div>
+            <span>Início</span>
+          </a>
+          <a href="calendario.html" class="nav-item">
+            <div class="nav-icon">
+              <i
+                data-lucide="calendar-days"
+                style="width: 22px; height: 22px"
+              ></i>
+            </div>
+            <span>Calendário</span>
+          </a>
+          <a href="index.html" class="nav-item">
+            <div class="nav-icon">
+              <i data-lucide="compass" style="width: 22px; height: 22px"></i>
+            </div>
+            <span>Explorar</span>
+          </a>
+          <a href="minhas-reservas.html" class="nav-item active">
+            <div class="nav-icon">
+              <i data-lucide="list" style="width: 22px; height: 22px"></i>
+            </div>
+            <span>Lista</span>
+          </a>
+        </nav>
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+      lucide.createIcons();
+
+      let currentFilter = "all";
+
+      // Render reservas
+      function renderReservas() {
+        const container = document.getElementById("reservasList");
+        let reservas = JSON.parse(localStorage.getItem("reservas")) || [];
+
+        // Apply filter
+        if (currentFilter !== "all") {
+          reservas = reservas.filter((r) => r.status === currentFilter);
+        }
+
+        if (reservas.length === 0) {
+          container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">
+                            <i data-lucide="calendar-x" style="width: 40px; height: 40px;"></i>
+                        </div>
+                        <h3 class="empty-title">Sem reservas</h3>
+                        <p class="empty-text">Ainda não tem reservas. Faça a sua primeira reserva!</p>
+                        <a href="reserva.html" class="btn btn-primary">
+                            <i data-lucide="plus"></i> Criar Reserva
+                        </a>
+                    </div>
+                `;
+          lucide.createIcons();
+          return;
+        }
+
+        container.innerHTML = reservas
+          .map(
+            (reserva) => `
+                <div class="reserva-card" data-status="${reserva.status}">
+                    <div class="reserva-header">
+                        <div class="reserva-space">${reserva.espaco}</div>
+                        <span class="status-badge ${reserva.status === "pendente" ? "pending" : reserva.status === "confirmada" ? "confirmed" : "cancelled"}">
+                            ${reserva.status.charAt(0).toUpperCase() + reserva.status.slice(1)}
+                        </span>
+                    </div>
+                    <div class="reserva-datetime">
+                        <i data-lucide="calendar" style="width: 16px; height: 16px;"></i>
+                        <span>${reserva.data}</span>
+                        <span style="margin: 0 0.25rem;">•</span>
+                        <i data-lucide="clock" style="width: 16px; height: 16px;"></i>
+                        <span>${reserva.hora}</span>
+                    </div>
+                    ${reserva.observacoes ? `<div class="reserva-observations">${reserva.observacoes}</div>` : ""}
+                    ${
+                      reserva.status !== "cancelada"
+                        ? `
+                    <div class="reserva-actions">
+                        <button class="btn-cancel" onclick="cancelarReserva(${reserva.id})">
+                            <i data-lucide="x-circle" style="width: 16px; height: 16px; vertical-align: middle;"></i>
+                            Cancelar
+                        </button>
+                    </div>
+                    `
+                        : ""
+                    }
+                </div>
+            `,
+          )
+          .join("");
+
+        lucide.createIcons();
+      }
+
+      // Cancel reserva
+      function cancelarReserva(id) {
+        if (!confirm("Tem a certeza que deseja cancelar esta reserva?")) return;
+
+        let reservas = JSON.parse(localStorage.getItem("reservas")) || [];
+        const index = reservas.findIndex((r) => r.id === id);
+
+        if (index !== -1) {
+          reservas[index].status = "cancelada";
+          localStorage.setItem("reservas", JSON.stringify(reservas));
+          showToast("Reserva cancelada com sucesso!", "success");
+          renderReservas();
+        }
+      }
+
+      // Filter buttons
+      document
+        .querySelectorAll(".reservas-filters .pill-btn")
+        .forEach((btn) => {
+          btn.addEventListener("click", () => {
+            document
+              .querySelectorAll(".reservas-filters .pill-btn")
+              .forEach((b) => b.classList.remove("active"));
+            btn.classList.add("active");
+            currentFilter = btn.dataset.filter;
+            renderReservas();
+          });
+        });
+
+      // Initial render
+      renderReservas();
+    </script>
+  </body>
+</html>

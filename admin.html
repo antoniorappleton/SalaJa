@@ -1,0 +1,177 @@
+﻿<!doctype html>
+<html lang="pt">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Administração - Ramalhão</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#003B73" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="icon" type="image/png" href="logo.svg" />
+    <link rel="apple-touch-icon" href="logo.svg" />
+  </head>
+  <body>
+    <div class="app-layout">
+      <!-- Sidebar -->
+      <aside class="sidebar" id="appSidebar">
+        <div class="sidebar-header">
+          <div class="logo-wrapper">
+            <img
+              src="logo.svg"
+              alt="SalaJá"
+              style="width: 32px; height: auto"
+            />
+            <h2>SalaJá</h2>
+          </div>
+          <button class="icon-btn close-sidebar mobile-only" id="closeSidebar">
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+        <div class="sidebar-content">
+          <div class="nav-section-title">Principal</div>
+          <nav class="sidebar-nav">
+            <a href="dashboard.html" class="nav-link"
+              ><i data-lucide="layout-dashboard"></i> Dashboard</a
+            >
+            <a href="index.html" class="nav-link"
+              ><i data-lucide="compass"></i> Explorar</a
+            >
+            <a href="reserva.html" class="nav-link"
+              ><i data-lucide="calendar-plus"></i> Criar Reserva</a
+            >
+            <a href="calendario.html" class="nav-link"
+              ><i data-lucide="calendar-days"></i> Calendário</a
+            >
+            <a href="horarios.html" class="nav-link"
+              ><i data-lucide="clock"></i> Horários</a
+            >
+            <a href="minhas-reservas.html" class="nav-link"
+              ><i data-lucide="calendar-check"></i> As Minhas Reservas</a
+            >
+          </nav>
+          <div class="nav-section-title mt-4">Conta</div>
+          <nav class="sidebar-nav">
+            <a href="perfil.html" class="nav-link"
+              ><i data-lucide="user"></i> Perfil</a
+            >
+            <a href="definicoes.html" class="nav-link"
+              ><i data-lucide="settings"></i> Definições</a
+            >
+            <a
+              href="admin.html"
+              class="nav-link active"
+              id="nav-admin"
+              style="display: none"
+              ><i data-lucide="shield-check"></i> Administração</a
+            >
+            <a
+              href="login.html"
+              class="nav-link text-danger"
+              style="margin-top: auto"
+              ><i data-lucide="log-out"></i> Terminar Sessão</a
+            >
+          </nav>
+        </div>
+      </aside>
+
+      <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+      <div class="main-wrapper">
+        <header class="top-bar">
+          <div class="top-bar-left">
+            <button class="icon-btn menu-btn mobile-only" id="openSidebar">
+              <i data-lucide="menu"></i>
+            </button>
+            <h1 class="page-title mobile-only">Admin</h1>
+            <div class="desktop-only text-muted">
+              <h1 class="page-title text-navy">Painel de Administração</h1>
+              <p style="font-size: 0.9rem">
+                Gerir Reservas e Utilizadores Pendentes
+              </p>
+            </div>
+          </div>
+          <div class="top-bar-right">
+            <a href="perfil.html" class="profile-avatar">
+              <i data-lucide="user" style="width: 20px; height: 20px"></i>
+            </a>
+          </div>
+        </header>
+
+        <main class="content-area">
+          <div
+            class="category-pills animate-in"
+            style="animation-delay: 0.1s; margin-bottom: 1.5rem"
+          >
+            <button
+              class="pill-btn active"
+              id="btn-tab-reservas"
+              onclick="switchAdminTab('reservas')"
+            >
+              Aprovar Reservas
+            </button>
+            <button
+              class="pill-btn"
+              id="btn-tab-utilizadores"
+              onclick="switchAdminTab('utilizadores')"
+            >
+              Aprovar Contas
+            </button>
+          </div>
+
+          <!-- Tab Reservas -->
+          <div
+            id="admin-tab-reservas"
+            class="animate-in"
+            style="animation-delay: 0.2s"
+          >
+            <div class="space-list mt-3" id="adminReservasList">
+              <!-- Reservas rendered via app.js -->
+            </div>
+          </div>
+
+          <!-- Tab Utilizadores -->
+          <div id="admin-tab-utilizadores" style="display: none">
+            <div class="space-list mt-3" id="adminUsersList">
+              <!-- Users rendered via app.js -->
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+      lucide.createIcons();
+
+      function switchAdminTab(tab) {
+        document.getElementById("btn-tab-reservas").classList.remove("active");
+        document
+          .getElementById("btn-tab-utilizadores")
+          .classList.remove("active");
+
+        document.getElementById("admin-tab-reservas").style.display = "none";
+        document.getElementById("admin-tab-utilizadores").style.display =
+          "none";
+
+        if (tab === "reservas") {
+          document.getElementById("btn-tab-reservas").classList.add("active");
+          document.getElementById("admin-tab-reservas").style.display = "block";
+        } else {
+          document
+            .getElementById("btn-tab-utilizadores")
+            .classList.add("active");
+          document.getElementById("admin-tab-utilizadores").style.display =
+            "block";
+        }
+      }
+    </script>
+  </body>
+</html>

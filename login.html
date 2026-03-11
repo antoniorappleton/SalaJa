@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="pt">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Login - SalaJá</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#003B73" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+      .login-container {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+        background: linear-gradient(
+          135deg,
+          var(--color-navy) 0%,
+          var(--color-navy-light) 50%,
+          var(--color-navy-dark) 100%
+        );
+      }
+      .login-card {
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        padding: 2rem;
+        width: 100%;
+        max-width: 400px;
+        box-shadow: var(--shadow-lg);
+      }
+      .login-logo {
+        text-align: center;
+        margin-bottom: 2rem;
+      }
+      .login-logo img {
+        width: 64px;
+        height: auto;
+        margin-bottom: 1rem;
+      }
+      .login-logo h1 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--color-navy);
+      }
+      .login-logo p {
+        color: var(--color-text-muted);
+        font-size: 0.9rem;
+        margin-top: 0.25rem;
+      }
+      .login-form {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+      .login-input-group {
+        position: relative;
+      }
+      .login-input-icon {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--color-text-muted);
+        pointer-events: none;
+      }
+      .login-input {
+        width: 100%;
+        padding: 0.875rem 1rem 0.875rem 2.75rem;
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        font-size: 1rem;
+        transition: var(--transition);
+      }
+      .login-input:focus {
+        outline: none;
+        border-color: var(--color-navy);
+        box-shadow: 0 0 0 3px rgba(0, 59, 115, 0.1);
+      }
+      .login-btn {
+        background: var(--color-navy);
+        color: white;
+        border: none;
+        padding: 1rem;
+        border-radius: var(--radius-md);
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+        margin-top: 0.5rem;
+      }
+      .login-btn:hover {
+        background: var(--color-navy-light);
+      }
+      .login-divider {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin: 1.5rem 0;
+      }
+      .login-divider::before,
+      .login-divider::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: var(--color-border);
+      }
+      .login-divider span {
+        font-size: 0.8rem;
+        color: var(--color-text-muted);
+      }
+      .login-demo-accounts {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+      .demo-account-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem 1rem;
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        background: var(--color-surface);
+        cursor: pointer;
+        transition: var(--transition);
+        text-align: left;
+      }
+      .demo-account-btn:hover {
+        border-color: var(--color-navy);
+        background: rgba(0, 59, 115, 0.02);
+      }
+      .demo-account-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: var(--radius-md);
+        background: rgba(0, 59, 115, 0.1);
+        color: var(--color-navy);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .demo-account-info {
+        flex: 1;
+      }
+      .demo-account-name {
+        font-weight: 500;
+        font-size: 0.9rem;
+      }
+      .demo-account-role {
+        font-size: 0.75rem;
+        color: var(--color-text-muted);
+      }
+      .login-forgot {
+        text-align: center;
+        margin-top: 1rem;
+      }
+      .login-forgot a {
+        color: var(--color-navy);
+        font-size: 0.875rem;
+        text-decoration: none;
+      }
+      .login-forgot a:hover {
+        text-decoration: underline;
+      }
+      .login-footer {
+        text-align: center;
+        margin-top: 1.5rem;
+        font-size: 0.8rem;
+        color: var(--color-text-muted);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="login-container">
+      <div class="login-card animate-in">
+        <div class="login-logo">
+          <img
+            src="logo.svg"
+            alt="SalaJá"
+            onerror="
+              this.style.display = 'none';
+              this.nextElementSibling.style.display = 'block';
+            "
+            style="display: none"
+          />
+          <div
+            style="
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              gap: 0.5rem;
+              margin-bottom: 0.5rem;
+            "
+          >
+            <i
+              data-lucide="building-2"
+              style="width: 48px; height: 48px; color: var(--color-navy)"
+            ></i>
+          </div>
+          <h1>SalaJá</h1>
+          <p>Ramalhão Reservas</p>
+        </div>
+
+        <form class="login-form" id="loginForm">
+          <div class="login-input-group">
+            <i data-lucide="mail" class="login-input-icon"></i>
+            <input
+              type="email"
+              class="login-input"
+              id="emailInput"
+              placeholder="Email institucional"
+              required
+            />
+          </div>
+          <div class="login-input-group">
+            <i data-lucide="lock" class="login-input-icon"></i>
+            <input
+              type="password"
+              class="login-input"
+              id="passwordInput"
+              placeholder="Palavra-passe"
+              required
+            />
+          </div>
+          <button type="submit" class="login-btn">
+            <i
+              data-lucide="log-in"
+              style="
+                width: 18px;
+                height: 18px;
+                vertical-align: middle;
+                margin-right: 0.5rem;
+              "
+            ></i>
+            Entrar
+          </button>
+        </form>
+
+        <div class="login-forgot">
+          <a
+            href="#"
+            onclick="
+              alert('Contacte o administrador para recuperar a palavra-passe');
+              return false;
+            "
+          >
+            Esqueceu a palavra-passe?
+          </a>
+        </div>
+
+        <div class="login-divider">
+          <span>ou entre com uma conta demo</span>
+        </div>
+
+        <div class="login-demo-accounts">
+          <button class="demo-account-btn" onclick="loginAsDemo('utilizador')">
+            <div class="demo-account-icon">
+              <i data-lucide="user"></i>
+            </div>
+            <div class="demo-account-info">
+              <div class="demo-account-name">João Silva</div>
+              <div class="demo-account-role">Conta de Utilizador</div>
+            </div>
+            <i
+              data-lucide="chevron-right"
+              style="color: var(--color-text-muted)"
+            ></i>
+          </button>
+          <button class="demo-account-btn" onclick="loginAsDemo('admin')">
+            <div class="demo-account-icon">
+              <i data-lucide="shield-check"></i>
+            </div>
+            <div class="demo-account-info">
+              <div class="demo-account-name">Admin User</div>
+              <div class="demo-account-role">Conta de Administrador</div>
+            </div>
+            <i
+              data-lucide="chevron-right"
+              style="color: var(--color-text-muted)"
+            ></i>
+          </button>
+        </div>
+
+        <div class="login-footer">
+          <p>© 2026 SalaJá - Sistema de Reservas</p>
+          <p>Colégio do Ramalhão</p>
+        </div>
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+      lucide.createIcons();
+
+      // Form login
+      document.getElementById("loginForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+        const email = document.getElementById("emailInput").value;
+
+        // Simple validation - accept any email with password
+        const user = {
+          nome: email
+            .split("@")[0]
+            .replace(".", " ")
+            .replace(/\b\w/g, (l) => l.toUpperCase()),
+          email: email,
+          role: email.includes("admin") ? "admin" : "utilizador",
+        };
+
+        localStorage.setItem("currentUser", JSON.stringify(user));
+        showToast("Login realizado com sucesso!", "success");
+
+        setTimeout(() => {
+          window.location.href = "dashboard.html";
+        }, 1000);
+      });
+
+      // Demo login
+      function loginAsDemo(role) {
+        const user =
+          role === "admin"
+            ? { nome: "Admin User", email: "admin@ramalhoo.pt", role: "admin" }
+            : {
+                nome: "João Silva",
+                email: "joao.silva@ramalhoo.pt",
+                role: "utilizador",
+              };
+
+        localStorage.setItem("currentUser", JSON.stringify(user));
+        showToast(
+          `Entrou como ${role === "admin" ? "Administrador" : "Utilizador"}!`,
+          "success",
+        );
+
+        setTimeout(() => {
+          window.location.href = "dashboard.html";
+        }, 1000);
+      }
+    </script>
+  </body>
+</html>

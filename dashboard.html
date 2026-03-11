@@ -1,0 +1,284 @@
+﻿<!doctype html>
+<html lang="pt">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Dashboard - SalaJá</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#003B73" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Add simple styles for dashboard summary cards -->
+    <style>
+      .dashboard-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1rem;
+        margin-bottom: 2rem;
+      }
+      .stat-card {
+        background: var(--color-white);
+        border-radius: var(--radius-md);
+        padding: 1.5rem;
+        box-shadow: var(--shadow-sm);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+      .stat-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: rgba(0, 59, 115, 0.05);
+        color: var(--color-navy);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1rem;
+      }
+      .stat-value {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: var(--color-navy);
+        line-height: 1;
+        margin-bottom: 0.25rem;
+      }
+      .stat-label {
+        font-size: 0.85rem;
+        color: var(--color-text-muted);
+        font-weight: 500;
+      }
+      .quick-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        margin-bottom: 2rem;
+      }
+      .quick-action-btn {
+        background: var(--color-navy);
+        color: var(--color-white);
+        border: none;
+        border-radius: var(--radius-md);
+        padding: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+      }
+      .quick-action-btn:hover {
+        opacity: 0.9;
+        transform: translateY(-2px);
+      }
+      .quick-action-btn.secondary {
+        background: var(--color-white);
+        color: var(--color-navy);
+        border: 1px solid var(--color-border);
+      }
+      .quick-action-btn.secondary:hover {
+        background: rgba(0, 59, 115, 0.05);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app-layout">
+      <!-- Sidebar -->
+      <aside class="sidebar" id="appSidebar">
+        <div class="sidebar-header">
+          <div class="logo-wrapper">
+            <img
+              src="logo.svg"
+              alt="SalaJá"
+              style="width: 32px; height: auto"
+            />
+            <h2>SalaJá</h2>
+          </div>
+          <button class="icon-btn close-sidebar mobile-only" id="closeSidebar">
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+        <div class="sidebar-content">
+          <div class="nav-section-title">Principal</div>
+          <nav class="sidebar-nav">
+            <a href="dashboard.html" class="nav-link active"
+              ><i data-lucide="layout-dashboard"></i> Dashboard</a
+            >
+            <a href="index.html" class="nav-link"
+              ><i data-lucide="compass"></i> Explorar</a
+            >
+            <a href="reserva.html" class="nav-link"
+              ><i data-lucide="calendar-plus"></i> Criar Reserva</a
+            >
+            <a href="calendario.html" class="nav-link"
+              ><i data-lucide="calendar-days"></i> Calendário</a
+            >
+            <a href="horarios.html" class="nav-link"
+              ><i data-lucide="clock"></i> Horários</a
+            >
+            <a href="minhas-reservas.html" class="nav-link"
+              ><i data-lucide="calendar-check"></i> As Minhas Reservas</a
+            >
+          </nav>
+          <div class="nav-section-title mt-4">Conta</div>
+          <nav class="sidebar-nav">
+            <a href="perfil.html" class="nav-link"
+              ><i data-lucide="user"></i> Perfil</a
+            >
+            <a href="definicoes.html" class="nav-link"
+              ><i data-lucide="settings"></i> Definições</a
+            >
+            <a
+              href="admin.html"
+              class="nav-link"
+              id="nav-admin"
+              style="display: none"
+              ><i data-lucide="shield-check"></i> Administração</a
+            >
+            <a
+              href="login.html"
+              class="nav-link text-danger"
+              style="margin-top: auto"
+              ><i data-lucide="log-out"></i> Terminar Sessão</a
+            >
+          </nav>
+        </div>
+      </aside>
+
+      <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+      <div class="main-wrapper">
+        <header class="top-bar">
+          <div class="top-bar-left">
+            <button class="icon-btn menu-btn mobile-only" id="openSidebar">
+              <i data-lucide="menu"></i>
+            </button>
+            <h1 class="page-title mobile-only">Dashboard</h1>
+            <div class="desktop-only text-muted">
+              <h1 class="page-title text-navy">Resumo</h1>
+              <p style="font-size: 0.9rem">Visão geral da sua atividade.</p>
+            </div>
+          </div>
+          <div class="top-bar-right">
+            <button class="icon-btn desktop-only" style="margin-right: 0.5rem">
+              <i data-lucide="bell"></i>
+            </button>
+            <a href="perfil.html" class="profile-avatar"
+              ><i data-lucide="user" style="width: 20px; height: 20px"></i
+            ></a>
+          </div>
+        </header>
+
+        <main class="content-area">
+          <div
+            class="welcome-section animate-in mobile-only"
+            style="animation-delay: 0.1s; margin-bottom: 1.5rem"
+          >
+            <h2 class="welcome-title">Olá novamente!</h2>
+            <p class="welcome-subtitle">Aqui está o seu resumo de atividade.</p>
+          </div>
+
+          <div class="dashboard-stats animate-in" style="animation-delay: 0.2s">
+            <div class="stat-card">
+              <div class="stat-icon"><i data-lucide="calendar-check"></i></div>
+              <div class="stat-value" id="statTotalReservas">0</div>
+              <div class="stat-label">Total de Reservas</div>
+            </div>
+            <div class="stat-card">
+              <div
+                class="stat-icon"
+                style="color: #f59e0b; background: rgba(245, 158, 11, 0.1)"
+              >
+                <i data-lucide="clock"></i>
+              </div>
+              <div class="stat-value" id="statPendentes">0</div>
+              <div class="stat-label">Pendentes</div>
+            </div>
+            <div class="stat-card desktop-only">
+              <div
+                class="stat-icon"
+                style="color: #10b981; background: rgba(16, 185, 129, 0.1)"
+              >
+                <i data-lucide="check-circle"></i>
+              </div>
+              <div class="stat-value" id="statConfirmadas">0</div>
+              <div class="stat-label">Confirmadas</div>
+            </div>
+          </div>
+
+          <div class="quick-actions animate-in" style="animation-delay: 0.3s">
+            <button
+              class="quick-action-btn"
+              onclick="window.location.href = 'reserva.html'"
+            >
+              <i data-lucide="plus"></i> Nova Reserva
+            </button>
+            <button
+              class="quick-action-btn secondary"
+              onclick="window.location.href = 'calendario.html'"
+            >
+              <i data-lucide="calendar"></i> Ver Calendário
+            </button>
+          </div>
+
+          <div
+            class="section-title mt-4 mb-3 animate-in"
+            style="animation-delay: 0.4s"
+          >
+            <h3>Atividade Recente</h3>
+          </div>
+
+          <div class="space-list" id="dashboardReservasList">
+            <!-- Loaded via app.js -->
+          </div>
+        </main>
+
+        <nav class="bottom-nav mobile-only">
+          <a href="dashboard.html" class="nav-item active">
+            <div class="nav-icon">
+              <i
+                data-lucide="layout-dashboard"
+                style="width: 22px; height: 22px"
+              ></i>
+            </div>
+            <span>Início</span>
+          </a>
+          <a href="calendario.html" class="nav-item">
+            <div class="nav-icon">
+              <i
+                data-lucide="calendar-days"
+                style="width: 22px; height: 22px"
+              ></i>
+            </div>
+            <span>Calendário</span>
+          </a>
+          <a href="index.html" class="nav-item">
+            <div class="nav-icon">
+              <i data-lucide="compass" style="width: 22px; height: 22px"></i>
+            </div>
+            <span>Explorar</span>
+          </a>
+          <a href="minhas-reservas.html" class="nav-item">
+            <div class="nav-icon">
+              <i data-lucide="list" style="width: 22px; height: 22px"></i>
+            </div>
+            <span>Lista</span>
+          </a>
+        </nav>
+      </div>
+    </div>
+    <script src="app.js"></script>
+    <script>
+      lucide.createIcons();
+    </script>
+  </body>
+</html>
