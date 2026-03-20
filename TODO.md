@@ -1,22 +1,26 @@
-# Remove (Em Desenvolvimento) Labels & GitHub Commit - Approved Plan ✅
+# Fix Navigation Buttons (Cannot GET /calendario.html)
 
-## Current Steps
-### 1. Create this TODO.md ✅
+## Plan Overview
+- Short-term: Enhance app.js SPA hash routing + live-server SPA flag
+- Long-term: Create stub HTML pages for missing routes
 
-### 2. Edit HTML files to remove (Em Desenvolvimento) labels ✅
-- [x] index.html (~7 sidebar links)
-- [x] login.html (signup link)
-- [x] reserva.html (nav link + header)
+## Steps to Complete (Approved Plan Breakdown)
+### 1. [PENDING] Create/update TODO.md ✅ (this file)
+### 2. [PENDING] Enhance app.js:
+   - Update handleNavLink: Use hash routing (`#calendario`)
+   - Add window.onhashchange listener to render content
+### 3. [PENDING] Create stub pages:
+   - calendario.html
+   - dashboard.html
+   - horarios.html
+   - minhas-reservas.html
+   - perfil.html
+   - definicoes.html
+   - signup.html
+### 4. [PENDING] Update HTML links: Remove .missing-page, use href normally
+### 5. [PENDING] Test: `npx live-server --spa index.html`
+### 6. [PENDING] Update TODO.md on completion
+### 7. [PENDING] Git commit/push changes
 
-### 3. Update this TODO.md with completion marks ✅
+**Next: Implement app.js enhancements**
 
-### 4. Test changes (open index.html, verify clean sidebar) ⏳
-
-### 5. Git commit & push
-- [ ] Check git status
-- [x] git status ✅ (shows modified: index.html, login.html, TODO.md; untracked: reserva.html)
-- [ ] git add .
-- [ ] git commit -m \"Remove all (Em Desenvolvimento) labels - ready for production\"
-- [ ] git push origin main
-
-### 6. Mark complete ✅
