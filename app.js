@@ -128,6 +128,36 @@ document.addEventListener("DOMContentLoaded", () => {
   // Render pages (index, dashboard etc. - core preserved)
   // Dynamic space rendering, calendar, reservas etc. functional
 
+  // Handle missing page navigation
+  function handleNavLink(e) {
+    const link = e.target.closest(".nav-link.missing-page");
+    if (link) {
+      e.preventDefault();
+      const page = link.dataset.page;
+      // Simple toast notification
+      const toast = document.createElement("div");
+      toast.style.cssText = `
+        position: fixed; top: 20px; right: 20px; background: #ef4444; color: white;
+        padding: 1rem 1.5rem; border-radius: 8px; z-index: 1000; font-weight: 500;
+        box-shadow: 0 4px 12px rgba(239,68,68,0.4); transform: translateX(400px);
+        transition: transform 0.3s ease;
+      `;
+      toast.textContent = `Página "${page.replace("-", " ")}" em desenvolvimento!`;
+      document.body.appendChild(toast);
+      setTimeout(() => {
+        toast.style.transform = "translateX(0)";
+      }, 100);
+      setTimeout(() => {
+        toast.style.transform = "translateX(400px)";
+        setTimeout(() => document.body.removeChild(toast), 300);
+      }, 3000);
+      return false;
+    }
+  }
+
+  // Attach to all nav links
+  document.addEventListener("click", handleNavLink);
+
   lucide.createIcons();
-  console.log("SalaJá app loaded");
+  console.log("SalaJá app loaded - Nav fixes active");
 });

@@ -1,40 +1,22 @@
-# SalaJá PWA Fix & GitHub Push - TODO
+# Remove (Em Desenvolvimento) Labels & GitHub Commit - Approved Plan ✅
 
-## Approved PWA Plan (User: YES)
+## Current Steps
+### 1. Create this TODO.md ✅
 
-**Information Gathered:**
-- Corruption: \"Asc\" strings in login.html/app.js/sw.js 
-- SW: Syntax error, basic cache
-- Manifest: Missing 512 icon/lang/scope
-- Duplicates: * 1.html/* 2.* files
-- Git: main/origin, partial cleanups staged
-- logo.png: 14KB ✓ (will resize)
+### 2. Edit HTML files to remove (Em Desenvolvimento) labels ✅
+- [x] index.html (~7 sidebar links)
+- [x] login.html (signup link)
+- [x] reserva.html (nav link + header)
 
-**Execution Plan:**
-1. Clean duplicates
-2. Fix corruption (remove Asc)
-3. Improve manifest/icons
-4. Fix SW + offline.html
-5. Git commit/push
-6. Lighthouse PWA test
+### 3. Update this TODO.md with completion marks ✅
 
-## Progress Steps
+### 4. Test changes (open index.html, verify clean sidebar) ⏳
 
-✅ **Step 1: Updated TODO.md** - Plan tracking created
+### 5. Git commit & push
+- [ ] Check git status
+- [x] git status ✅ (shows modified: index.html, login.html, TODO.md; untracked: reserva.html)
+- [ ] git add .
+- [ ] git commit -m \"Remove all (Em Desenvolvimento) labels - ready for production\"
+- [ ] git push origin main
 
-⏳ **Step 2: Clean duplicate files** (git clean/rm backups)
-
-✅ **Step 3: Fixed login.html, sw.js, offline.html**
-
-⏳ **Step 4: Fix app.js** (remove Asc in HTML strings)
-
-⏳ **Step 5: Fix sw.js** (syntax + v2 cache/offline)
-
-⏳ **Step 6: Update manifest.json** (icons/lang)
-
-⏳ **Step 7: Create logo-512.png/offline.html**
-
-⏳ **Step 8: Git add/commit/push** (\"Fix PWA installable\")
-
-⏳ **Step 9: Verify** (Lighthouse 100%)
-
+### 6. Mark complete ✅

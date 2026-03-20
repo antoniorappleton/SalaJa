@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="pt">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Criar Reserva - SalaJá</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="manifest" href="manifest.json" />
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="app-layout">
+      <aside class="sidebar" id="appSidebar">
+        <!-- Sidebar content same as index.html -->
+        <div class="sidebar-header">
+          <div class="logo-wrapper">
+            <img
+              src="logo.png"
+              alt="SalaJá"
+              style="width: 32px; height: auto"
+            />
+            <h2>SalaJá</h2>
+          </div>
+          <button class="icon-btn close-sidebar mobile-only" id="closeSidebar">
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+        <div class="sidebar-content">
+          <div class="nav-section-title">Principal</div>
+          <nav class="sidebar-nav">
+            <a href="index.html" class="nav-link"
+              ><i data-lucide="compass"></i> Explorar</a
+            >
+            <a href="reserva.html" class="nav-link active"
+              ><i data-lucide="calendar-plus"></i> Criar Reserva</a
+            >
+            <a
+              href="dashboard.html"
+              class="nav-link missing-page"
+              data-page="dashboard"
+              ><i data-lucide="layout-dashboard"></i> Dashboard</a
+            >
+          </nav>
+          <div class="nav-section-title mt-4">Conta</div>
+          <nav class="sidebar-nav">
+            <a
+              href="login.html"
+              class="nav-link text-danger"
+              style="margin-top: auto"
+              ><i data-lucide="log-out"></i> Terminar Sessão</a
+            >
+          </nav>
+        </div>
+      </aside>
+      <div class="sidebar-overlay" id="sidebarOverlay"></div>
+      <div class="main-wrapper">
+        <header class="top-bar">
+          <div class="top-bar-left">
+            <button class="icon-btn menu-btn mobile-only" id="openSidebar">
+              <i data-lucide="menu"></i>
+            </button>
+            <h1 class="page-title mobile-only">Criar Reserva</h1>
+          </div>
+          <div class="top-bar-right">
+            <a href="login.html" class="profile-avatar"
+              ><i data-lucide="user" style="width: 20px; height: 20px"></i
+            ></a>
+          </div>
+        </header>
+        <main class="content-area">
+          <div
+            style="
+              text-align: center;
+              padding: 4rem 2rem;
+              color: var(--color-text-muted);
+            "
+          >
+            <i
+              data-lucide="calendar-plus"
+              style="
+                width: 80px;
+                height: 80px;
+                margin: 0 auto 1rem;
+                opacity: 0.5;
+              "
+            ></i>
+            <h2>Criar Reserva</h2>
+            <p>A funcionalidade será implementada em breve.</p>
+            <a
+              href="index.html"
+              class="btn btn-primary"
+              style="margin-top: 2rem; display: inline-block"
+              >← Voltar ao Explorar</a
+            >
+          </div>
+        </main>
+      </div>
+    </div>
+    <script src="app.js"></script>
+    <script>
+      lucide.createIcons();
+    </script>
+  </body>
+</html>
