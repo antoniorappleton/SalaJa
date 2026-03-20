@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="pt">
   <head>
     <meta charset="UTF-8" />
@@ -30,6 +30,7 @@
       href="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Yellow_Star.svg/180px-Yellow_Star.svg.png"
     />
   </head>
+
   <body>
     <div class="app-layout">
       <!-- Sidebar (Desktop default / Mobile Drawer) -->
@@ -37,7 +38,7 @@
         <div class="sidebar-header">
           <div class="logo-wrapper">
             <img
-              src="logo.svg"
+              src="logo.png"
               alt="SalaJá"
               style="width: 32px; height: auto"
             />
@@ -145,139 +146,8 @@
           </div>
 
           <!-- Grid/List of Spaces -->
-          <div class="spaces-grid">
-            <div
-              class="space-card animate-in pulse-click"
-              style="animation-delay: 0.3s"
-            >
-              <div class="space-icon-wrapper">
-                <i data-lucide="dumbbell"></i>
-              </div>
-              <div class="space-info">
-                <h3>Ginásio Velho</h3>
-                <p>Espaço clássico para atividades físicas e treinos.</p>
-              </div>
-              <div class="space-action">
-                <button class="btn btn-primary btn-sm desktop-only">
-                  Reservar
-                </button>
-                <i data-lucide="chevron-right" class="mobile-only"></i>
-              </div>
-            </div>
-
-            <div
-              class="space-card animate-in pulse-click"
-              style="animation-delay: 0.4s"
-            >
-              <div class="space-icon-wrapper">
-                <i data-lucide="activity"></i>
-              </div>
-              <div class="space-info">
-                <h3>Ginásio Novo</h3>
-                <p>Instalações modernas para multi-desportos.</p>
-              </div>
-              <div class="space-action">
-                <button class="btn btn-primary btn-sm desktop-only">
-                  Reservar
-                </button>
-                <i data-lucide="chevron-right" class="mobile-only"></i>
-              </div>
-            </div>
-
-            <div
-              class="space-card animate-in pulse-click"
-              style="animation-delay: 0.5s"
-            >
-              <div class="space-icon-wrapper">
-                <i data-lucide="align-justify"></i>
-              </div>
-              <div class="space-info">
-                <h3>Sala das Riscas</h3>
-                <p>Ideal para reuniões e trabalho de grupo.</p>
-              </div>
-              <div class="space-action">
-                <button class="btn btn-primary btn-sm desktop-only">
-                  Reservar
-                </button>
-                <i data-lucide="chevron-right" class="mobile-only"></i>
-              </div>
-            </div>
-
-            <div
-              class="space-card animate-in pulse-click"
-              style="animation-delay: 0.6s"
-            >
-              <div class="space-icon-wrapper">
-                <i data-lucide="book-heart"></i>
-              </div>
-              <div class="space-info">
-                <h3>Sala Carlo Acutis</h3>
-                <p>Sala multimédia e tecnológica de estudo.</p>
-              </div>
-              <div class="space-action">
-                <button class="btn btn-primary btn-sm desktop-only">
-                  Reservar
-                </button>
-                <i data-lucide="chevron-right" class="mobile-only"></i>
-              </div>
-            </div>
-
-            <div
-              class="space-card animate-in pulse-click"
-              style="animation-delay: 0.7s"
-            >
-              <div class="space-icon-wrapper">
-                <i data-lucide="church"></i>
-              </div>
-              <div class="space-info">
-                <h3>Capela</h3>
-                <p>Espaço silencioso para reflexão e oração.</p>
-              </div>
-              <div class="space-action">
-                <button class="btn btn-primary btn-sm desktop-only">
-                  Reservar
-                </button>
-                <i data-lucide="chevron-right" class="mobile-only"></i>
-              </div>
-            </div>
-
-            <div
-              class="space-card animate-in pulse-click"
-              style="animation-delay: 0.8s"
-            >
-              <div class="space-icon-wrapper">
-                <i data-lucide="goal"></i>
-              </div>
-              <div class="space-info">
-                <h3>Polidesportivo</h3>
-                <p>Campo exterior para futebol, ténis e mais.</p>
-              </div>
-              <div class="space-action">
-                <button class="btn btn-primary btn-sm desktop-only">
-                  Reservar
-                </button>
-                <i data-lucide="chevron-right" class="mobile-only"></i>
-              </div>
-            </div>
-
-            <div
-              class="space-card animate-in pulse-click"
-              style="animation-delay: 0.9s"
-            >
-              <div class="space-icon-wrapper">
-                <i data-lucide="graduation-cap"></i>
-              </div>
-              <div class="space-info">
-                <h3>Sala do Profissional</h3>
-                <p>Espaço reservado para ensino e formações.</p>
-              </div>
-              <div class="space-action">
-                <button class="btn btn-primary btn-sm desktop-only">
-                  Reservar
-                </button>
-                <i data-lucide="chevron-right" class="mobile-only"></i>
-              </div>
-            </div>
+          <div class="spaces-grid" id="mainSpacesGrid">
+            <!-- Cards rendered via app.js -->
           </div>
         </main>
 
