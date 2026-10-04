@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="pt">
+<html lang="pt-PT">
   <head>
     <meta charset="UTF-8" />
     <meta
@@ -31,7 +31,7 @@
     />
   </head>
 
-  <body>
+  <body data-page="spaces">
     <div class="app-layout">
       <!-- Sidebar (Desktop default / Mobile Drawer) -->
       <aside class="sidebar" id="appSidebar">
@@ -51,64 +51,18 @@
         <div class="sidebar-content">
           <div class="nav-section-title">Principal</div>
           <nav class="sidebar-nav">
-            <a
-              href="dashboard.html"
-              class="nav-link missing-page"
-              data-page="dashboard"
-              ><i data-lucide="layout-dashboard"></i> Dashboard</a
-            >
-            <a href="index.html" class="nav-link active"
-              ><i data-lucide="compass"></i> Explorar</a
-            >
-            <a
-              href="reserva.html"
-              class="nav-link missing-page"
-              data-page="reserva"
-              ><i data-lucide="calendar-plus"></i> Criar Reserva</a
-            >
-            <a
-              href="calendario.html"
-              class="nav-link missing-page"
-              data-page="calendario"
-              ><i data-lucide="calendar-days"></i> Calendário</a
-            >
-            <a
-              href="horarios.html"
-              class="nav-link missing-page"
-              data-page="horarios"
-              ><i data-lucide="clock"></i> Horários</a
-            >
-            <a
-              href="minhas-reservas.html"
-              class="nav-link missing-page"
-              data-page="minhas-reservas"
-              ><i data-lucide="calendar-check"></i> As Minhas Reservas</a
-            >
+            <a href="dashboard.html" class="nav-link" data-nav="dashboard"><i data-lucide="layout-dashboard"></i> Dashboard</a>
+            <a href="index.html" class="nav-link" data-nav="spaces"><i data-lucide="compass"></i> Explorar espaços</a>
+            <a href="reserva.html" class="nav-link" data-nav="reserve"><i data-lucide="calendar-plus"></i> Pedir reserva</a>
+            <a href="minhas-reservas.html" class="nav-link" data-nav="reservations"><i data-lucide="calendar-check"></i> As minhas reservas</a>
+            <a href="admin.html" class="nav-link" data-nav="admin" data-admin-nav hidden><i data-lucide="shield-check"></i> Validar pedidos</a>
           </nav>
           <div class="nav-section-title mt-4">Conta</div>
           <nav class="sidebar-nav">
             <a
-              href="perfil.html"
-              class="nav-link missing-page"
-              data-page="perfil"
-              ><i data-lucide="user"></i> Perfil</a
-            >
-            <a
-              href="definicoes.html"
-              class="nav-link missing-page"
-              data-page="definicoes"
-              ><i data-lucide="settings"></i> Definições</a
-            >
-            <a
-              href="admin.html"
-              class="nav-link"
-              id="nav-admin"
-              style="display: none"
-              ><i data-lucide="shield-check"></i> Administração</a
-            >
-            <a
-              href="login.html"
+              href="https://antoniorappleton.github.io/"
               class="nav-link text-danger"
+              data-signout
               style="margin-top: auto"
               ><i data-lucide="log-out"></i> Terminar Sessão</a
             >
@@ -127,9 +81,9 @@
             <button class="icon-btn menu-btn mobile-only" id="openSidebar">
               <i data-lucide="menu"></i>
             </button>
-            <h1 class="page-title mobile-only">Explorar</h1>
+            <h1 class="page-title mobile-only">Explorar espaços</h1>
             <div class="desktop-only text-muted">
-              <h1 class="page-title text-navy">Bem-vindo(a) de volta 👋</h1>
+              <h1 class="page-title text-navy">Explorar espaços</h1>
               <p style="font-size: 0.9rem">O que quer reservar hoje?</p>
             </div>
           </div>
@@ -137,7 +91,7 @@
             <button class="icon-btn desktop-only" style="margin-right: 0.5rem">
               <i data-lucide="bell"></i>
             </button>
-            <a href="login.html" class="profile-avatar">
+            <a href="minhas-reservas.html" class="profile-avatar" aria-label="As minhas reservas">
               <i data-lucide="user" style="width: 20px; height: 20px"></i>
             </a>
           </div>
@@ -156,10 +110,7 @@
 
           <!-- Filters / Categories -->
           <div class="category-pills animate-in" style="animation-delay: 0.2s">
-            <button class="pill-btn active">Todos</button>
-            <button class="pill-btn">Desporto</button>
-            <button class="pill-btn">Estudo</button>
-            <button class="pill-btn">Especiais</button>
+            <div class="category-pills" id="categoryPills"></div>
           </div>
 
           <div class="section-title desktop-only mt-3 mb-3">
@@ -167,14 +118,13 @@
           </div>
 
           <!-- Grid/List of Spaces -->
-          <div class="spaces-grid" id="mainSpacesGrid">
-            <!-- Cards rendered via app.js -->
-          </div>
+          <div id="pageMessage" class="notice" hidden></div>
+          <div class="spaces-grid" id="mainSpacesGrid"><p class="text-muted">A carregar espaços…</p></div>
         </main>
 
         <!-- Bottom Navigation App Bar (Mobile Only) -->
         <nav class="bottom-nav mobile-only">
-          <a href="dashboard.html" class="nav-item">
+          <a href="dashboard.html" class="nav-item" data-nav="dashboard">
             <div class="nav-icon">
               <i
                 data-lucide="layout-dashboard"
@@ -183,22 +133,22 @@
             </div>
             <span>Início</span>
           </a>
-          <a href="calendario.html" class="nav-item">
+          <a href="reserva.html" class="nav-item" data-nav="reserve">
             <div class="nav-icon">
               <i
-                data-lucide="calendar-days"
+                data-lucide="calendar-plus"
                 style="width: 22px; height: 22px"
               ></i>
             </div>
-            <span>Calendário</span>
+            <span>Pedir</span>
           </a>
-          <a href="index.html" class="nav-item active">
+          <a href="index.html" class="nav-item" data-nav="spaces">
             <div class="nav-icon">
               <i data-lucide="compass" style="width: 22px; height: 22px"></i>
             </div>
             <span>Explorar</span>
           </a>
-          <a href="minhas-reservas.html" class="nav-item">
+          <a href="minhas-reservas.html" class="nav-item" data-nav="reservations">
             <div class="nav-icon">
               <i data-lucide="list" style="width: 22px; height: 22px"></i>
             </div>
@@ -208,9 +158,10 @@
       </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <script src="https://antoniorappleton.github.io/direcao-turma/js/core/config.js"></script>
+    <script src="https://antoniorappleton.github.io/direcao-turma/js/core/session.js"></script>
+    <script src="https://antoniorappleton.github.io/direcao-turma/js/core/auth.js"></script>
     <script src="app.js"></script>
-    <script>
-      lucide.createIcons();
-    </script>
   </body>
 </html>

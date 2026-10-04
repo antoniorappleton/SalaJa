@@ -1,26 +1,11 @@
-# Fix Navigation Buttons (Cannot GET /calendario.html)
+# SalaJá — preparação para testes
 
-## Plan Overview
-- Short-term: Enhance app.js SPA hash routing + live-server SPA flag
-- Long-term: Create stub HTML pages for missing routes
-
-## Steps to Complete (Approved Plan Breakdown)
-### 1. [PENDING] Create/update TODO.md ✅ (this file)
-### 2. [PENDING] Enhance app.js:
-   - Update handleNavLink: Use hash routing (`#calendario`)
-   - Add window.onhashchange listener to render content
-### 3. [PENDING] Create stub pages:
-   - calendario.html
-   - dashboard.html
-   - horarios.html
-   - minhas-reservas.html
-   - perfil.html
-   - definicoes.html
-   - signup.html
-### 4. [PENDING] Update HTML links: Remove .missing-page, use href normally
-### 5. [PENDING] Test: `npx live-server --spa index.html`
-### 6. [PENDING] Update TODO.md on completion
-### 7. [PENDING] Git commit/push changes
-
-**Next: Implement app.js enhancements**
-
+- [x] Reutilizar autenticação partilhada da Comunidade CSJ.
+- [x] Implementar dashboard, pedidos pessoais e formulário de reserva.
+- [x] Implementar fila Admin para aprovar/recusar pedidos.
+- [x] Proteger pedidos e validação com políticas Supabase RLS.
+- [x] Impedir aprovações sobrepostas no servidor.
+- [x] Corrigir o âmbito do cache PWA para não interferir com as outras apps.
+- [ ] Executar `db/salaja_setup.sql` no SQL Editor do Supabase partilhado.
+- [ ] Testar pedido, aprovação, recusa e conflito com duas contas.
+- [ ] Publicar depois de validar o fluxo local.

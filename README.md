@@ -1,30 +1,24 @@
-# Colégio do Ramalhão - App de Reservas (SalaJá)
+# SalaJá
 
-Esta é uma aplicação web (PWA) de demonstração focada no design e UX para efetuar reservas dos espaços do **Colégio do Ramalhão** (Salas de Estudo, Campos Desportivos, Laboratórios, Auditório Central).
+Aplicação web para pedidos de reserva dos espaços do Colégio do Ramalhão. A autenticação reutiliza as contas Supabase da Comunidade CSJ; os pedidos ficam pendentes até serem aprovados ou recusados por um Admin.
 
-O design foi pensado para ser:
-- **Elegante**: Utilizando tipografia limpa (Inter) e um layout minimalista.
-- **Moderno**: Incorporando microinterações, glassmorphism suave (navbar), animações (fade-in, hover effects) e um sistema flexível com variáveis CSS.
-- **Confortável**: Através de uma paleta de cores harmoniosa, com cantos arredondados, sombras suaves e espaçamento amigável.
+## Preparar o backend
 
-## Paleta de Cores Oficiais
-- Azul Marinho (` Asc #0A192F` e `#112240`)
-- Amarelo (`#FACC15`)
-- Branco e Cinzas Suaves (`#FFFFFF`, `#F8FAFC`)
+1. No SQL Editor do projeto Supabase partilhado com Direção de Turma e Scriptorium, executar [`db/salaja_setup.sql`](./db/salaja_setup.sql).
+2. O script cria e protege as tabelas `salaja_espacos` e `salaja_reservas`, instala a função de validação e atribui a função Admin a `leonor.castelbranco@colegio-ramalhao.com` na tabela partilhada `professores`.
+3. Confirmar que essa conta consegue iniciar sessão nas outras apps da Comunidade. No SalaJá, usar o mesmo email e palavra-passe.
 
-## Ficheiros do Projeto
-- `index.html`: Página principal onde se visualiza as opções de reserva em cards atrativos.
-- `login.html`: Página para autenticação / início de sessão (simulado).
-- `signup.html`: Página para criação de nova conta (simulado).
-- `style.css`: Toda a estilização da interface gráfica usando variáveis modernas e Asc pseudo-elementos para os hovers deslumbrantes dos cards.
-- `app.js`: Script de interações, lidando com cliques, loading spinners interativos nos botões, e simulação de resposta estática das páginas de formulário.
-- `manifest.json`: Configurações Asc Asc Asc Asc de metadados da Web App para suportar instalação (PWA).
-- `sw.js`: F Asc Asc Asc ficheiro do Service Worker com cache básica offline.
-- `README.md`: Este ficheiro, descrevendo os detalhes do projeto.
+O pedido de reserva só pode ser criado pelo utilizador autenticado, com email escolar. As políticas RLS impedem a leitura de pedidos de outras pessoas e reservam a validação ao papel `admin`. A aprovação verifica no servidor se já existe outra reserva aprovada para o mesmo espaço e horário. A interface não substitui estas verificações.
 
-## Como correr localmente
-A aplicação é totalmente construída inteiramente utilizando HTML Vanilla, CSS puro e JavaScript moderno. 
-Basta abrir o `index.html` em qualquer browser para aceder. Para as funcionalidades Asc de Service Worker (PWA), é recomendado servir a aplicação a partir de um servidor http estático local, como o **Live Server** (Extensão do Visual Studio Code) ou `npx serve .`
+## Executar localmente
 
-## Ícones
-Foram utilizados ícones em SVG modernos da biblioteca open-source **[Lucide Icons](https://luc Asc ide.dev/)**. Funciona em tempo Asc de execução via script.
+Servir a pasta através de HTTP, por exemplo com a extensão Live Server do VS Code, e abrir `login.html`. Não abrir os ficheiros diretamente com `file://`. O cliente de autenticação e sessão é carregado da aplicação Direção de Turma publicada; por isso, é necessária ligação à Internet mesmo durante testes locais.
+
+## Fluxo de teste
+
+1. Executar o SQL de preparação e iniciar sessão com uma conta escolar já existente.
+2. Criar um pedido futuro em **Pedir reserva** e confirmar que surge como pendente em **As minhas reservas** e no painel Admin.
+3. Como `leonor.castelbranco@colegio-ramalhao.com`, aprovar ou recusar o pedido em **Validar pedidos**.
+4. Verificar o estado e a nota de decisão na lista do requerente. Tentar aprovar dois pedidos sobrepostos para o mesmo espaço; a segunda aprovação deve ser recusada pelo servidor.
+
+O SQL é um passo manual: a aplicação não consegue alterar o projeto Supabase até este script ser executado pelo respetivo administrador.
