@@ -22,7 +22,10 @@ const PAGE_TITLES = {
   reserve: "Pedir reserva",
   reservations: "As minhas reservas",
   admin: "Validar pedidos",
+  "gerir-espacos": "Gerir espaços",
 };
+
+const ESPACOS_BUCKET = "salaja-espacos";
 
 let currentUser;
 let currentProfessor;
@@ -77,11 +80,34 @@ function setActiveNavigation() {
 async function loadSpaces() {
   const { data, error } = await window.supabase
     .from("salaja_espacos")
-    .select("id,nome,categoria,descricao,ativo")
+    .select("id,nome,categoria,descricao,ativo,capacidade,imagem_path")
     .eq("ativo", true)
     .order("nome");
   if (error) throw error;
   return data || [];
+}
+
+// Admin: todos os espaços (incluindo inativos), para a página de gestão. A
+// política salaja_espacos_read já deixa o Admin ver inativos (ativo OR
+// salaja_is_admin()) — só não filtramos por "ativo" aqui.
+async function loadAllSpacesForAdmin() {
+  const { data, error } = await window.supabase
+    .from("salaja_espacos")
+    .select("id,nome,categoria,descricao,ativo,capacidade,imagem_path")
+    .order("nome");
+  if (error) throw error;
+  return data || [];
+}
+
+// Fotografia de um espaço: prioriza a carregada via Gerir Espaços
+// (imagem_path, no bucket público "salaja-espacos"); recorre ao mapa
+// estático SPACE_IMAGES para os espaços originais, criados por SQL antes
+// desta funcionalidade existir.
+function spaceImageUrl(space) {
+  if (space.imagem_path) {
+    return window.supabase.storage.from(ESPACOS_BUCKET).getPublicUrl(space.imagem_path).data.publicUrl;
+  }
+  return SPACE_IMAGES[space.id] || null;
 }
 
 function renderSpaces(spaces, category = "Todos") {
@@ -92,7 +118,7 @@ function renderSpaces(spaces, category = "Todos") {
     : spaces.filter((space) => space.categoria === category);
   container.innerHTML = selected.length
     ? selected.map((space) => {
-      const image = SPACE_IMAGES[space.id];
+      const image = spaceImageUrl(space);
       return `<article class="space-card has-image">
         ${image ? `<img class="space-image" src="${escapeHtml(image)}" alt="" loading="lazy">` : ""}
         <div class="space-content">
@@ -100,6 +126,7 @@ function renderSpaces(spaces, category = "Todos") {
             <span class="space-category">${escapeHtml(space.categoria)}</span>
             <h3>${escapeHtml(space.nome)}</h3>
             <p>${escapeHtml(space.descricao)}</p>
+            ${space.capacidade ? `<p class="text-muted">Até ${escapeHtml(space.capacidade)} pessoas</p>` : ""}
           </div>
           <a class="btn btn-primary" href="reserva.html?espaco=${encodeURIComponent(space.id)}">Pedir</a>
         </div>
@@ -237,6 +264,146 @@ async function handleReviewClick(event) {
   }
 }
 
+function renderEspacosAdminList(spaces) {
+  const container = document.getElementById("espacosAdminList");
+  if (!container) return;
+  container.innerHTML = spaces.length
+    ? `<div class="spaces-grid">${spaces.map((space) => {
+      const image = spaceImageUrl(space);
+      return `<article class="space-card has-image" style="${space.ativo ? "" : "opacity:.55"}">
+        ${image ? `<img class="space-image" src="${escapeHtml(image)}" alt="" loading="lazy">` : ""}
+        <div class="space-content">
+          <div class="space-info">
+            <span class="space-category">${escapeHtml(space.categoria)}${space.ativo ? "" : " · Inativo"}</span>
+            <h3>${escapeHtml(space.nome)}</h3>
+            <p>${escapeHtml(space.descricao)}</p>
+            ${space.capacidade ? `<p class="text-muted">Até ${escapeHtml(space.capacidade)} pessoas</p>` : ""}
+          </div>
+          <div style="display:flex; flex-direction:column; gap:.5rem;">
+            <button class="btn btn-secondary" type="button" data-edit-espaco="${escapeHtml(space.id)}">Editar</button>
+            <button class="btn btn-secondary" type="button" data-toggle-espaco="${escapeHtml(space.id)}" data-ativo="${space.ativo}">${space.ativo ? "Desativar" : "Ativar"}</button>
+          </div>
+        </div>
+      </article>`;
+    }).join("")}</div>`
+    : '<p class="empty-state">Ainda não há espaços registados.</p>';
+}
+
+async function renderGerirEspacosPage() {
+  const list = document.getElementById("espacosAdminList");
+  list.innerHTML = '<p class="text-muted">A carregar espaços…</p>';
+  let spaces = await loadAllSpacesForAdmin();
+  renderEspacosAdminList(spaces);
+
+  const form = document.getElementById("espacoForm");
+  const formTitle = document.getElementById("espacoFormTitle");
+  const idField = document.getElementById("espacoId");
+  const cancelBtn = document.getElementById("cancelarEspacoBtn");
+
+  function resetForm() {
+    form.reset();
+    idField.value = "";
+    formTitle.textContent = "Novo espaço";
+    cancelBtn.hidden = true;
+  }
+
+  async function recarregar() {
+    spaces = await loadAllSpacesForAdmin();
+    renderEspacosAdminList(spaces);
+  }
+
+  cancelBtn.addEventListener("click", resetForm);
+
+  list.addEventListener("click", async (event) => {
+    const editBtn = event.target.closest("[data-edit-espaco]");
+    const toggleBtn = event.target.closest("[data-toggle-espaco]");
+    if (editBtn) {
+      const space = spaces.find((item) => item.id === editBtn.dataset.editEspaco);
+      if (!space) return;
+      idField.value = space.id;
+      document.getElementById("espacoNome").value = space.nome || "";
+      document.getElementById("espacoCategoria").value = space.categoria || "";
+      document.getElementById("espacoDescricao").value = space.descricao || "";
+      document.getElementById("espacoCapacidade").value = space.capacidade || "";
+      formTitle.textContent = `A editar: ${space.nome}`;
+      cancelBtn.hidden = false;
+      form.scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
+    if (toggleBtn) {
+      toggleBtn.disabled = true;
+      try {
+        const novoAtivo = toggleBtn.dataset.ativo !== "true";
+        const { error } = await window.supabase
+          .from("salaja_espacos")
+          .update({ ativo: novoAtivo })
+          .eq("id", toggleBtn.dataset.toggleEspaco);
+        if (error) throw error;
+        await recarregar();
+      } catch (error) {
+        showMessage(error.message || "Não foi possível atualizar o espaço.");
+        toggleBtn.disabled = false;
+      }
+    }
+  });
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    showMessage("");
+    const submit = form.querySelector('[type="submit"]');
+    const nome = document.getElementById("espacoNome").value.trim();
+    const categoria = document.getElementById("espacoCategoria").value.trim();
+    const descricao = document.getElementById("espacoDescricao").value.trim();
+    const capacidadeRaw = document.getElementById("espacoCapacidade").value;
+    const capacidade = capacidadeRaw ? Number(capacidadeRaw) : null;
+    const ficheiro = document.getElementById("espacoImagem").files[0];
+    const existingId = idField.value || null;
+
+    if (!nome || !categoria || !descricao) {
+      showMessage("Nome, categoria e descrição são obrigatórios.");
+      return;
+    }
+    if (capacidadeRaw && (!Number.isInteger(capacidade) || capacidade <= 0)) {
+      showMessage("A capacidade, se indicada, tem de ser um número inteiro positivo.");
+      return;
+    }
+
+    submit.disabled = true;
+    submit.textContent = "A guardar…";
+    try {
+      const id = existingId || crypto.randomUUID();
+      let imagemPath;
+      if (ficheiro) {
+        imagemPath = `${id}/${Date.now()}-${ficheiro.name.replace(/\s+/g, "_")}`;
+        const { error: uploadError } = await window.supabase.storage
+          .from(ESPACOS_BUCKET)
+          .upload(imagemPath, ficheiro);
+        if (uploadError) throw uploadError;
+      }
+
+      const payload = { nome, categoria, descricao, capacidade };
+      if (imagemPath) payload.imagem_path = imagemPath;
+
+      if (existingId) {
+        const { error } = await window.supabase.from("salaja_espacos").update(payload).eq("id", existingId);
+        if (error) throw error;
+      } else {
+        const { error } = await window.supabase.from("salaja_espacos").insert({ id, ativo: true, ...payload });
+        if (error) throw error;
+      }
+
+      showMessage(existingId ? "Espaço atualizado." : "Espaço criado.", "success");
+      resetForm();
+      await recarregar();
+    } catch (error) {
+      showMessage(error.message || "Não foi possível guardar o espaço.");
+    } finally {
+      submit.disabled = false;
+      submit.textContent = "Guardar espaço";
+    }
+  });
+}
+
 async function renderReservePage() {
   const spaces = await loadSpaces();
   const select = document.getElementById("spaceId");
@@ -330,6 +497,7 @@ async function initializeApp() {
       reserve: "reserva.html",
       reservations: "minhas-reservas.html",
       admin: "admin.html",
+      "gerir-espacos": "gerir-espacos.html",
     }[currentPage] || "index.html";
     const requestedSpace = currentPage === "reserve"
       ? new URLSearchParams(window.location.search).get("espaco")
@@ -352,7 +520,7 @@ async function initializeApp() {
     window.location.replace("https://antoniorappleton.github.io/direcao-turma/mudar-password.html");
     return;
   }
-  if (currentPage === "admin" && currentProfessor.role !== "admin") {
+  if ((currentPage === "admin" || currentPage === "gerir-espacos") && currentProfessor.role !== "admin") {
     window.location.replace("dashboard.html?semPermissao=1");
     return;
   }
@@ -370,6 +538,7 @@ async function initializeApp() {
   if (currentPage === "reservations") await renderReservationsPage();
   if (currentPage === "dashboard") await renderDashboardPage();
   if (currentPage === "admin") await renderAdminPage();
+  if (currentPage === "gerir-espacos") await renderGerirEspacosPage();
   window.lucide?.createIcons();
 }
 

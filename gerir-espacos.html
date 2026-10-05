@@ -3,13 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>As minhas reservas — SalaJá</title>
+    <title>Gerir espaços — SalaJá</title>
     <link rel="stylesheet" href="style.css" />
     <link rel="manifest" href="manifest.json" />
     <meta name="theme-color" content="#003B73" />
     <script src="https://unpkg.com/lucide@latest"></script>
   </head>
-  <body data-page="reservations">
+  <body data-page="gerir-espacos">
     <div class="app-layout">
       <aside class="sidebar" id="appSidebar">
         <div class="sidebar-header"><a class="logo-wrapper" href="index.html"><img src="logo.png" alt="" width="32"><h2>SalaJá</h2></a><button class="icon-btn close-sidebar mobile-only" id="closeSidebar" aria-label="Fechar menu">×</button></div>
@@ -28,11 +28,32 @@
       </aside>
       <div class="sidebar-overlay" id="sidebarOverlay"></div>
       <div class="main-wrapper">
-        <header class="top-bar"><div class="top-bar-left"><button class="icon-btn menu-btn mobile-only" id="openSidebar" aria-label="Abrir menu"><i data-lucide="menu"></i></button><h1 class="page-title">As minhas reservas</h1></div><a href="dashboard.html" class="profile-avatar" aria-label="Dashboard"><i data-lucide="user"></i></a></header>
+        <header class="top-bar"><div class="top-bar-left"><button class="icon-btn menu-btn mobile-only" id="openSidebar" aria-label="Abrir menu"><i data-lucide="menu"></i></button><h1 class="page-title">Gerir espaços</h1></div><a href="dashboard.html" class="profile-avatar" aria-label="Dashboard"><i data-lucide="user"></i></a></header>
         <main class="content-area">
           <div id="pageMessage" class="notice" role="status" hidden></div>
-          <div class="section-heading"><div><h2>Pedidos de reserva</h2><p class="text-muted">Os pedidos ficam pendentes até à validação do Admin.</p></div><a class="btn btn-primary" href="reserva.html">Novo pedido</a></div>
-          <section id="reservationsList"><p class="text-muted">A carregar pedidos…</p></section>
+          <section class="form-panel">
+            <h2 id="espacoFormTitle">Novo espaço</h2>
+            <p class="text-muted">Nome, categoria e descrição são obrigatórios. Capacidade e fotografia são opcionais.</p>
+            <form id="espacoForm" class="reservation-form">
+              <input type="hidden" id="espacoId">
+              <div class="form-grid">
+                <div class="form-group"><label for="espacoNome">Nome</label><input id="espacoNome" type="text" class="form-control" maxlength="120" required placeholder="Ex.: Sala de Música"></div>
+                <div class="form-group"><label for="espacoCategoria">Categoria</label><input id="espacoCategoria" type="text" class="form-control" maxlength="60" required placeholder="Ex.: Estudo, Desporto, Especiais…"></div>
+              </div>
+              <div class="form-group"><label for="espacoDescricao">Descrição</label><textarea id="espacoDescricao" class="form-control" maxlength="400" rows="3" required placeholder="Breve descrição do espaço"></textarea></div>
+              <div class="form-grid">
+                <div class="form-group"><label for="espacoCapacidade">Capacidade <span class="text-muted">(nº de lugares, opcional)</span></label><input id="espacoCapacidade" type="number" min="1" step="1" class="form-control" placeholder="Ex.: 24"></div>
+                <div class="form-group"><label for="espacoImagem">Fotografia <span class="text-muted">(opcional)</span></label><input id="espacoImagem" type="file" accept="image/*" class="form-control"></div>
+              </div>
+              <div style="display:flex; gap:.5rem;">
+                <button class="btn btn-primary" type="submit">Guardar espaço</button>
+                <button class="btn btn-secondary" type="button" id="cancelarEspacoBtn" hidden>Cancelar edição</button>
+              </div>
+            </form>
+          </section>
+
+          <div class="section-heading mt-4"><div><h2>Espaços registados</h2><p class="text-muted">Desativar um espaço esconde-o da exploração, sem apagar o histórico de reservas.</p></div></div>
+          <section id="espacosAdminList"><p class="text-muted">A carregar espaços…</p></section>
         </main>
         <nav class="bottom-nav mobile-only"><a href="dashboard.html" class="nav-item" data-nav="dashboard"><i data-lucide="layout-dashboard"></i><span>Início</span></a><a href="reserva.html" class="nav-item" data-nav="reserve"><i data-lucide="calendar-plus"></i><span>Pedir</span></a><a href="index.html" class="nav-item" data-nav="spaces"><i data-lucide="compass"></i><span>Espaços</span></a><a href="minhas-reservas.html" class="nav-item" data-nav="reservations"><i data-lucide="list"></i><span>Pedidos</span></a></nav>
       </div>

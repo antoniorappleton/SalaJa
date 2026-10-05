@@ -7,6 +7,7 @@ Aplicação web para pedidos de reserva dos espaços do Colégio do Ramalhão. A
 1. No SQL Editor do projeto Supabase partilhado com Direção de Turma e Scriptorium, executar [`db/salaja_setup.sql`](./db/salaja_setup.sql).
 2. O script cria e protege as tabelas `salaja_espacos` e `salaja_reservas`, instala a função de validação e atribui a função Admin a `leonor.castelbranco@colegio-ramalhao.com` na tabela partilhada `professores`.
 3. Confirmar que essa conta consegue iniciar sessão nas outras apps da Comunidade. No SalaJá, usar o mesmo email e palavra-passe.
+4. Executar também [`db/add_gerir_espacos.sql`](./db/add_gerir_espacos.sql) — acrescenta `capacidade`/`imagem_path` a `salaja_espacos` e cria o bucket público `salaja-espacos`, usados pela página **Gerir espaços** (só visível para o Admin).
 
 O pedido de reserva só pode ser criado pelo utilizador autenticado, com email escolar. As políticas RLS impedem a leitura de pedidos de outras pessoas e reservam a validação ao papel `admin`. A aprovação verifica no servidor se já existe outra reserva aprovada para o mesmo espaço e horário. A interface não substitui estas verificações.
 
