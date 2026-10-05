@@ -73,7 +73,10 @@ function setActiveNavigation() {
     heading.textContent = PAGE_TITLES[currentPage] || "SalaJá";
   });
   document.querySelectorAll("[data-admin-nav]").forEach((link) => {
-    link.hidden = currentProfessor?.role !== "admin";
+    // salaja_admin é próprio do SalaJá (ver db/add_salaja_admin_flag.sql) —
+    // não usa professores.role, que é partilhado com o Scriptorium e tem lá
+    // outro significado (ex: antonio.appleton é admin só no Scriptorium).
+    link.hidden = currentProfessor?.salaja_admin !== true;
   });
 }
 
@@ -200,7 +203,7 @@ async function renderReservationsPage() {
 
 async function renderDashboardPage() {
   const reservations = await getReservations({
-    all: currentProfessor?.role === "admin",
+    all: currentProfessor?.salaja_admin === true,
   });
   const counts = {
     pending: reservations.filter((item) => item.estado === "pending").length,
@@ -218,8 +221,8 @@ async function renderDashboardPage() {
     .filter((item) => new Date(item.inicio) >= new Date() && item.estado !== "rejected")
     .sort((a, b) => new Date(a.inicio) - new Date(b.inicio))
     .slice(0, 5);
-  list.innerHTML = renderReservationRows(upcoming, currentProfessor?.role === "admin");
-  if (currentProfessor?.role === "admin") {
+  list.innerHTML = renderReservationRows(upcoming, currentProfessor?.salaja_admin === true);
+  if (currentProfessor?.salaja_admin === true) {
     list.onclick = handleReviewClick;
   }
 }
@@ -520,7 +523,7 @@ async function initializeApp() {
     window.location.replace("https://antoniorappleton.github.io/direcao-turma/mudar-password.html");
     return;
   }
-  if ((currentPage === "admin" || currentPage === "gerir-espacos") && currentProfessor.role !== "admin") {
+  if ((currentPage === "admin" || currentPage === "gerir-espacos") && currentProfessor.salaja_admin !== true) {
     window.location.replace("dashboard.html?semPermissao=1");
     return;
   }
