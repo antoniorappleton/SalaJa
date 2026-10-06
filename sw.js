@@ -1,6 +1,6 @@
 const CACHE_PREFIX = "salaJa-";
-const CACHE_NAME = `${CACHE_PREFIX}v6`;
-const LEGACY_CACHE_NAMES = ["salaJa-v2", "salaJa-v3", "salaJa-v4", "salaJa-v5"];
+const CACHE_NAME = `${CACHE_PREFIX}v7`;
+const LEGACY_CACHE_NAMES = ["salaJa-v2", "salaJa-v3", "salaJa-v4", "salaJa-v5", "salaJa-v6"];
 const SHELL_ASSETS = [
   "./",
   "./index.html",
